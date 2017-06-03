@@ -1,0 +1,57 @@
+import qualified Data.Map as M
+import XMonad
+import Graphics.X11.ExtraTypes.XF86
+import qualified XMonad as XMonad
+import XMonad.Hooks.SetWMName
+import XMonad.Actions.CycleWS
+
+-- imported for xmobar
+import XMonad.Hooks.ManageDocks
+import XMonad.Util.Run(spawnPipe)
+
+import qualified XMonad.StackSet as W
+
+myWorkspaces = map show [1..9]
+myNumRow = [xK_ampersand
+           , xK_bracketleft
+           , xK_braceleft
+           , xK_braceright
+           , xK_parenleft
+           , xK_equal
+           , xK_asterisk
+           , xK_parenright
+           , xK_plus] 
+
+myKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
+myKeys conf@(XConfig {modMask = modm}) =
+  M.fromList $ [((m.|. modm, k), windows $ f i)
+             | (i,k) <- zip (XMonad.workspaces conf) myNumRow
+             , (f,m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+  ++ [((noModMask, xF86XK_AudioMute), spawn "pactl set-sink-mute 1 toggle")
+     ,((noModMask, xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume 1 -10%")
+     ,((noModMask, xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume 1 +10%")
+     , ((modm,               xK_Down),  nextWS)
+     , ((modm,               xK_Up),    prevWS)
+     , ((modm .|. shiftMask, xK_Down),  shiftToNext)
+     , ((modm .|. shiftMask, xK_Up),    shiftToPrev)
+     , ((modm,               xK_Right), nextScreen)
+     , ((modm,               xK_Left),  prevScreen)
+     , ((modm .|. shiftMask, xK_Right), shiftNextScreen)
+     , ((modm .|. shiftMask, xK_Left),  shiftPrevScreen)
+     , ((modm,               xK_z),     toggleWS)
+     ]
+
+
+-- Matlab Java gui workaround.
+myStartupHook = setWMName "LG3D" 
+
+------------------------------------------------------------------------------
+main = xmonad $ defaultConfig { terminal = "gnome-terminal"
+                              , modMask = mod4Mask
+                              , keys    = \c -> myKeys c `M.union`
+                                          (keys defaultConfig c)
+                              , startupHook = myStartupHook
+                              , manageHook = manageDocks <+> manageHook defaultConfig
+                              , layoutHook = avoidStruts  $  layoutHook defaultConfig
+ 
+}
