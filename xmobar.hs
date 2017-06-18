@@ -93,7 +93,7 @@ Config {
         , Run Kbd            [ ("us(dvorak)" , "<fc=#00008B>DV</fc>")
                              , ("us"         , "<fc=#8B0000>US</fc>")
                              ]
-        , Run Com "/home/xren/.xmonad/xmobar_volume.sh" [] "volume" 30
+        , Run Com "/home/xren/.xmonad/xmobar_volume.sh" [] "volume" 5
         , Run Com "/home/xren/.xmonad/xmobar_wireless.sh" [] "wifi" 30
         --, Run Com "/home/xren/.xmonad/xmobar_dropbox.sh" [] "dropbox" 15
         , Run Com "dropbox" ["status"] "dropbox" 20

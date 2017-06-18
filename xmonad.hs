@@ -121,8 +121,8 @@ myFocusedBorderColor = "#ffb6b0"
 
 -- Colors for text and backgrounds of each tab when in "Tabbed" layout.
 tabConfig = defaultTheme {
-	    activeBorderColor = "#7C7C7C",
-	    activeTextColor = "#CEFFAC",
+    activeBorderColor = "#7C7C7C",
+    activeTextColor = "#CEFFAC",
     activeColor = "#000000",
     inactiveBorderColor = "#7C7C7C",
     inactiveTextColor = "#EEEEEE",
