@@ -201,11 +201,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Decrease brightness
   , ((0, xF86XK_MonBrightnessDown),
-     spawn "xrandr --output eDP-1-1 --brightness `echo $(xrandr --verbose| awk '/^eDP-1-1/,/^DP1/{if ($1 ~ /Brightness/) {print $NF; exit} }') - 0.1 |bc`")
+     spawn "~/.xmonad/brightness.sh dec")
 
   -- Increase brightness
   , ((0, xF86XK_MonBrightnessUp),
-     spawn "xrandr --output eDP-1-1 --brightness `echo $(xrandr --verbose| awk '/^eDP-1-1/,/^DP1/{if ($1 ~ /Brightness/) {print $NF; exit} }') + 0.1 |bc`")
+     spawn "~/.xmonad/brightness.sh inc")
 
   -- Audio previous.
   , ((0, 0x1008FF16),
