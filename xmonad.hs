@@ -199,6 +199,14 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask .|. controlMask, xK_k),
      spawn "pactl set-sink-volume 1 +10%")
 
+  -- Decrease brightness
+  , ((0, xF86XK_MonBrightnessDown),
+     spawn "xrandr --output eDP-1-1 --brightness `echo $(xrandr --verbose| awk '/^eDP-1-1/,/^DP1/{if ($1 ~ /Brightness/) {print $NF; exit} }') - 0.1 |bc`")
+
+  -- Increase brightness
+  , ((0, xF86XK_MonBrightnessUp),
+     spawn "xrandr --output eDP-1-1 --brightness `echo $(xrandr --verbose| awk '/^eDP-1-1/,/^DP1/{if ($1 ~ /Brightness/) {print $NF; exit} }') + 0.1 |bc`")
+
   -- Audio previous.
   , ((0, 0x1008FF16),
      spawn "")
