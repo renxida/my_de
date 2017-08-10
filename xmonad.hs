@@ -28,7 +28,7 @@ import qualified Data.Map        as M
 --
 myTerminal = "/usr/bin/xfce4-terminal"
 
-myNumRow = [xK_ampersand
+myDvorakRow = [xK_ampersand
            , xK_bracketleft
            , xK_braceleft
            , xK_braceright
@@ -37,6 +37,8 @@ myNumRow = [xK_ampersand
            , xK_asterisk
            , xK_parenright
            , xK_plus]
+myWorkspaceKeys = myDvorakRow
+-- myWorkspaceKeys = [xK_F1 .. xK_F9]
 
 -- The command to lock the screen or show the screensaver.
 myScreensaver = "/usr/bin/gnome-screensaver-command --lock"
@@ -78,6 +80,8 @@ myWorkspaces = ["1:term","2:web","3:code","4:vm","5:media"] ++ map show [6..9]
 myManageHook = composeAll
     [ className =? "Chromium"       --> doShift "2:web"
     , className =? "Google-chrome"  --> doShift "2:web"
+    , className =? "Atom"           --> doShift "3:code"
+    , className =? "Xfce4-terminal" --> doShift "1:term"
     , resource  =? "desktop_window" --> doIgnore
     , className =? "Galculator"     --> doFloat
     , className =? "Steam"          --> doFloat
@@ -88,6 +92,8 @@ myManageHook = composeAll
     , className =? "Xchat"          --> doShift "5:media"
     , className =? "stalonetray"    --> doIgnore
     , className =? "Wine"           --> doShift "9"
+    , className =? "Steam"          --> doShift "9"
+    , className =? "dota2"          --> doShift "8"
     , title     =? "PlayOnLinux"    --> doShift "9"
     , isFullscreen --> (doF W.focusDown <+> doFullFloat)]
 
@@ -186,7 +192,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- Increase volume.
   , ((0, xF86XK_AudioRaiseVolume),
      spawn "pactl set-sink-volume 1 +10%")
- 
+
   -- Quiet volueme
   , ((modMask .|. controlMask, xK_m),
      spawn "pactl set-sink-volume 1 25%")
@@ -307,7 +313,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- mod-[1..9], Switch to workspace N
   -- mod-shift-[1..9], Move client to workspace N
   [((m .|. modMask, k), windows $ f i)
-      | (i, k) <- zip (XMonad.workspaces conf) myNumRow
+      | (i, k) <- zip (XMonad.workspaces conf) myWorkspaceKeys
       , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
   ++
 
@@ -362,7 +368,13 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- per-workspace layout choices.
 --
 -- By default, do nothing.
-myStartupHook = return ()
+-- myStartupHook :: X ()
+myStartupHook = do
+    setWMName "LG3D"
+    spawn myTerminal
+    spawn "python /usr/bin/dropbox start"
+    spawn "atom"
+    spawn "google-chrome benchling.com"
 
 
 ------------------------------------------------------------------------
@@ -378,7 +390,6 @@ main = do
       --    , ppSep = "   "
       --}
       manageHook = manageDocks <+> myManageHook
-      , startupHook = setWMName "LG3D"
   }
 
 
