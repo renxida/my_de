@@ -5,10 +5,12 @@
 import System.IO
 import System.Exit
 import XMonad
+import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
+import XMonad.Actions.SpawnOn
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
@@ -38,7 +40,6 @@ myDvorakRow = [xK_ampersand
            , xK_parenright
            , xK_plus]
 myWorkspaceKeys = myDvorakRow
--- myWorkspaceKeys = [xK_F1 .. xK_F9]
 
 -- The command to lock the screen or show the screensaver.
 myScreensaver = "/usr/bin/gnome-screensaver-command --lock"
@@ -60,7 +61,7 @@ myLauncher = "dmenu_run"
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = ["1:term","2:web","3:code","4:vm","5:media"] ++ map show [6..9]
+myWorkspaces = map show [1..9]
 
 
 ------------------------------------------------------------------------
@@ -78,18 +79,16 @@ myWorkspaces = ["1:term","2:web","3:code","4:vm","5:media"] ++ map show [6..9]
 -- 'className' and 'resource' are used below.
 --
 myManageHook = composeAll
-    [ className =? "Chromium"       --> doShift "2:web"
-    , className =? "Google-chrome"  --> doShift "2:web"
-    , className =? "Atom"           --> doShift "3:code"
-    , className =? "Xfce4-terminal" --> doShift "1:term"
-    , resource  =? "desktop_window" --> doIgnore
+    [ resource  =? "desktop_window" --> doIgnore
+--    , className =? "Chromium"       --> doShift "2:web"
+--    , className =? "Google-chrome"  --> doShift "2:web"
+--    , className =? "Atom"           --> doShift "3:code"
+--    , className =? "Xfce4-terminal" --> doShift "1:term"
     , className =? "Galculator"     --> doFloat
     , className =? "Steam"          --> doFloat
     , className =? "Gimp"           --> doFloat
     , resource  =? "gpicview"       --> doFloat
     , className =? "MPlayer"        --> doFloat
-    , className =? "VirtualBox"     --> doShift "4:vm"
-    , className =? "Xchat"          --> doShift "5:media"
     , className =? "stalonetray"    --> doIgnore
     , className =? "Wine"           --> doShift "9"
     , className =? "Steam"          --> doShift "9"
@@ -162,7 +161,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Start a terminal.  Terminal to start is specified by myTerminal variable.
   [ ((modMask .|. shiftMask, xK_Return),
-     spawn $ XMonad.terminal conf)
+     spawnHere $ XMonad.terminal conf)
 
   -- Lock the screen using command specified by myScreensaver.
   , ((modMask .|. controlMask, xK_l),
@@ -371,11 +370,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- myStartupHook :: X ()
 myStartupHook = do
     setWMName "LG3D"
-    spawn myTerminal
     spawn "python /usr/bin/dropbox start"
-    spawn "atom"
-    spawn "google-chrome benchling.com"
-
 
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.
@@ -389,6 +384,7 @@ main = do
       --    , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor ""
       --    , ppSep = "   "
       --}
+--      manageHook = manageDocks <+> manageSpawn <+> myManageHook
       manageHook = manageDocks <+> myManageHook
   }
 
@@ -401,7 +397,7 @@ main = do
 --
 -- No need to modify this.
 --
-defaults = defaultConfig {
+defaults = desktopConfig {
     -- simple stuff
     terminal           = myTerminal,
     focusFollowsMouse  = myFocusFollowsMouse,
