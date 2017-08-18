@@ -1,10 +1,10 @@
 Config { 
 
    -- appearance
-     font =         "xft:Bitstream Vera Sans Mono:size=9:bold:antialias=true"
+     font =         "xft:Bitstream Vera Sans Mono:size=10:bold:antialias=true"
    , bgColor =      "black"
    , fgColor =      "#646464"
-   , position =     Top
+   , position =     Static { xpos=120, ypos=0, width= 1800, height=24 }
    , border =       BottomB
    , borderColor =  "#646464"
 

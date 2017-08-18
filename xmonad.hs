@@ -371,6 +371,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 myStartupHook = do
     setWMName "LG3D"
     spawn "python /usr/bin/dropbox start"
+    spawn "stalonetray -c ~/.xmonad/stalonetray.rc"
 
 ------------------------------------------------------------------------
 -- Run xmonad with all the defaults we set up.

@@ -1,0 +1,9 @@
+decorations none
+transparent false
+icon_gravity NW
+icon_size 24
+dockapp_mode none
+geometry 5x1+0+0
+max_geometry 5x1+0+0
+background "#000000"
+window_layer top
